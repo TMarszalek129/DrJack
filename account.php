@@ -42,6 +42,18 @@
             $username = "";
             $password = "";
             $dbname = "";
+            if($_SERVER['HTTP_CLIENT_IP'])
+            {
+                $ip = $_SERVER['HTTP_CLIENT_IP'];
+            }
+            else if($_SERVER['HTTP_X_FORWARDED_FOR'])
+            {
+                $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            }
+            else
+            {
+                $ip = $_SERVER['REMOTE_ADDR'];
+            }
 
             $conn = mysqli_connect($servername, $username, $password, $dbname);
             
@@ -60,8 +72,8 @@
                 }
                 } 
             
-            $sql = "INSERT INTO logins(user_id, passed)
-                    VALUES ('".$user_id."', '".$passed."')";
+            $sql = "INSERT INTO logins(user_id, passed, IP)
+                    VALUES ('".$user_id."', '".$passed."', '".$ip."')";
 
             if($passed == 1){
                 echo "Dopisano\n";
@@ -69,7 +81,8 @@
             }
             else
                 echo "\nWrong email or password!!!\n";
-                ?>   
+                ?>
+                <br><a href="change_password.php"> Reset password </a>   
                 <br><a href="home.php"> Back to home </a>
         
         

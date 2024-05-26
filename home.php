@@ -16,8 +16,11 @@
         <title> DrJack</title>
     </head>
 
-    <body>
+    <body style="text-align: center;">
         <h1>Logowanie: </h1>
+        <hr>
+        <img src="images/dr_jack.jpg" alt="DrJack" width="104" height="142">
+        <hr>
         <p>
             <form action="account.php" method="POST">
                 E-mail: <input type="email" name="email" required><br>
@@ -28,7 +31,8 @@
         </p>
         
         <a href="create_account.php"> Create new account </a><br>
-        <a href="change_password.php"> Change your actual password </a>
+        <a href="change_password.php"> Do you forgot password? </a><br>
+        <a href="admin.php">Admin</a>
 
     </body>
 </html>

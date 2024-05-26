@@ -18,6 +18,6 @@
         </p>
 
        
-        
+        <br><a href="home.php"> Back to home </a>
     </body>
 </html>
