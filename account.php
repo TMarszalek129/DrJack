@@ -41,9 +41,9 @@
             $sqlSelect = "SELECT * FROM accounts";
 
             $servername = "mysql.agh.edu.pl";
-            $username = "tmarsza1";
-            $password = "SL80yoFJTkYbL5mf";
-            $dbname = "tmarsza1";
+            $username = "";
+            $password = "";
+            $dbname = "";
             if($_SERVER['HTTP_CLIENT_IP'])
             {
                 $ip = $_SERVER['HTTP_CLIENT_IP'];

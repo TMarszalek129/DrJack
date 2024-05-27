@@ -49,9 +49,9 @@
             $sqlSelect = "SELECT * FROM accounts";
 
             $servername = "mysql.agh.edu.pl";
-            $username = "tmarsza1";
-            $password = "SL80yoFJTkYbL5mf";
-            $dbname = "tmarsza1";
+            $username = "";
+            $password = "";
+            $dbname = "";
 
             $conn = mysqli_connect($servername, $username, $password, $dbname);
             
