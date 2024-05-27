@@ -43,9 +43,9 @@
     }
 
     $servername = "mysql.agh.edu.pl";
-    $username = "";
-    $password = "";
-    $dbname = "";
+    $username = "tmarsza1";
+    $password = "SL80yoFJTkYbL5mf";
+    $dbname = "tmarsza1";
 
     $conn = mysqli_connect($servername, $username, $password, $dbname);
     if(!$conn)

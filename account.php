@@ -2,6 +2,8 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <title> DrJack</title>
     </head>
 
@@ -39,9 +41,9 @@
             $sqlSelect = "SELECT * FROM accounts";
 
             $servername = "mysql.agh.edu.pl";
-            $username = "";
-            $password = "";
-            $dbname = "";
+            $username = "tmarsza1";
+            $password = "SL80yoFJTkYbL5mf";
+            $dbname = "tmarsza1";
             if($_SERVER['HTTP_CLIENT_IP'])
             {
                 $ip = $_SERVER['HTTP_CLIENT_IP'];
@@ -76,12 +78,21 @@
                     VALUES ('".$user_id."', '".$passed."', '".$ip."')";
 
             if($passed == 1){
-                echo "Dopisano\n";
+                echo "You are logged in\n";
+                print_r($_SESSION);
                 mysqli_query($conn, $sql);
+                $_SESSION["ID"] = $user_id;                
             }
             else
                 echo "\nWrong email or password!!!\n";
                 ?>
+                <br>
+                <p>
+                    <form action="exams.php" method="POST">
+                        <input type="hidden" id="id" name="id" value=<?php echo "$user_id"; ?>>
+                        <input type="submit" value="See your examinations">
+                    </form>
+                </p>
                 <br><a href="change_password.php"> Reset password </a>   
                 <br><a href="home.php"> Back to home </a>
         
