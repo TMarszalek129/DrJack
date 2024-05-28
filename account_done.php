@@ -1,5 +1,5 @@
 <?php
-
+    session_start();
     function format($dane)
     {
         $dane = trim($dane);
@@ -42,10 +42,10 @@
         }
     }
 
-    $servername = "mysql.agh.edu.pl";
-    $username = "";
-    $password = "";
-    $dbname = "";
+    $servername = $_SESSION["servername"];
+    $username = $_SESSION["username"];
+    $password = $_SESSION["password"];
+    $dbname = $_SESSION["dbname"];
 
     $conn = mysqli_connect($servername, $username, $password, $dbname);
     if(!$conn)

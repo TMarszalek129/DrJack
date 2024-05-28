@@ -5,8 +5,17 @@
         session_regenerate_id();
         $_SESSION = array();
         $_SESSION["startLogin"] = 1;
-        $_SESSION["komunikat"] = "U mnie dziala";
+        
     }
+
+    $servername = "mysql.agh.edu.pl";
+    $username = "";
+    $password = "";
+    $dbname = "";
+    $_SESSION["servername"] = $servername;
+    $_SESSION["username"] = $username;
+    $_SESSION["password"] = $password;
+    $_SESSION["dbname"] = $dbname;
     
 ?>
 
@@ -35,7 +44,7 @@
         
         <a href="create_account.php"> Create new account </a><br>
         <a href="change_password.php"> Do you forgot password? </a><br>
-        <a href="admin.php"></a>
+        <a href="admin.php">Admin site</a>
 
     </body>
 </html>

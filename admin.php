@@ -10,10 +10,11 @@
     <body>
 
         <?php
-            $servername = "mysql.agh.edu.pl";
-            $username = "";
-            $password = "";
-            $dbname = "";
+            session_start();
+            $servername = $_SESSION["servername"];
+            $username = $_SESSION["username"];
+            $password = $_SESSION["password"];
+            $dbname = $_SESSION["dbname"];
 
             $conn = mysqli_connect($servername, $username, $password, $dbname);
 

@@ -6,10 +6,7 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <title> DrJack</title>
         <style>
-            a{
-                position: absolute;
-                bottom: 0px;
-            }
+            
             table {
             font-family: Arial, Helvetica, sans-serif;
             border-collapse: collapse;
@@ -32,12 +29,16 @@
             background-color: red;
             color: white;
             }
+            
         </style>
     </head>
 
     <body>
 
         <?php
+            session_start();
+            $email = $_SESSION["email"];
+            $pass = $_SESSION["pass"];
             $id = $_POST["id"];
             $sql_name = "SELECT account_id, first_name, last_name FROM accounts WHERE account_id = ".$id;
             $sql_m = "SELECT * FROM measures
@@ -45,10 +46,10 @@
              INNER JOIN units ON measures.unit_id = units.unit_id  
              WHERE measurements.account_id = ".$id;
 
-            $servername = "mysql.agh.edu.pl";
-            $username = "";
-            $password = "";
-            $dbname = "";
+            $servername = $_SESSION["servername"];
+            $username = $_SESSION["username"];
+            $password = $_SESSION["password"];
+            $dbname = $_SESSION["dbname"];
 
             $conn = mysqli_connect($servername, $username, $password, $dbname);
             
@@ -68,6 +69,7 @@
                 }
             echo "<h1>Hello ".$first_name." ".$last_name."!</h1>";
             echo "<h2>Your examination: </h2>";
+            echo "<hr>";
             echo "<table>
                 <tr>
                     <th>Measure</th>
@@ -97,6 +99,12 @@
                 echo "Blad: ".$sql."<br>".mysqli_error($conn);
             */ 
         ?>
-        <br><a href="account.php"> Back to your profile </a>
+        <p>
+            <form action="account.php" method="POST">
+                <input type="hidden" name="email" value=<?php echo "$email"; ?> >
+                <input type="hidden" name="password" value=<?php echo "$pass"; ?>>
+                <input type="submit" value="BACK TO YOUR PROFILE!">
+            </form>
+        </p>
     </body>
 </html>
