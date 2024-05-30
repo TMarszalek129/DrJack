@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <title> DrJack</title>
+        <link rel="icon" type="image/x-icon" href="images/favicon.ico">
         <style>
             
         </style>
@@ -21,7 +22,7 @@
                 $dane = htmlspecialchars($dane);
                 return $dane;
             }
-
+            $to_base = $_POST["to_base"];
             $passed = 0;
             $new_measurement = 0;
             if($_SERVER["REQUEST_METHOD"] == "POST")
@@ -70,10 +71,9 @@
            
 
             $sqlSelect = "SELECT * FROM accounts";
-            $sql = "INSERT INTO logins(user_id, passed, IP)
-                    VALUES ('".$user_id."', '".$passed."', '".$ip."')";
-            $sql_measures = "SELECT * FROM measures WHERE account_id = 0 OR account_id = '$user_id'";
-            $sql_units = "SELECT * FROM units WHERE account_id = 0 OR account_id = '$user_id'";
+           
+            $sql_measures = "SELECT * FROM measures";
+            $sql_units = "SELECT * FROM units";
             $sql_insert_measurement = "INSERT INTO measurement(account_id, measure_id, value_1, value_2, timestamp)
                                         VALUES ('".$user_id."', '".$measure_id."', '".$value_1."', '".$value_2."', '".$timestamp."')";
 
@@ -117,7 +117,9 @@
                         $passed = 1;
                         $user_id = $row['account_id'];
                         $first_name = $row['first_name']; 
-                        $last_name = $row['last_name'];    
+                        $last_name = $row['last_name'];
+                        $bday = $row['birth_date'];
+                        $sex = $row['sex'];    
                     }
                 }
                 }   
@@ -138,13 +140,19 @@
                 }
                 }
             
-            
+            $sql = "INSERT INTO logins(account_id, passed, IP)
+            VALUES ('".$user_id."', '".$passed."', '".$ip."')";
             
 
             if($passed == 1){
-                echo "Hello $first_name $last_name! \n";
-                mysqli_query($conn, $sql);
-                           
+                echo "Hello $first_name $last_name! <br>";
+                echo "Your birthday: $bday <br>";
+                $age = (date('Y') - date('Y',strtotime($bday)));
+                echo "You have <b>$age</b> years <br>";
+                $w_m = $sex == 'M' ? "man" : "woman";
+                echo "You are a <b>$w_m</b>";
+                if(!(empty($to_base)))
+                    mysqli_query($conn, $sql);
             }
             else
                 echo "\nWrong email or password!!!\n";
@@ -196,11 +204,62 @@
             </form>
             </p><hr>
 
-            <h2>Add new examination type: </h2>
-            
+            <h2>Add new examination type with new unit: </h2>
+            <p>
+            <form action="success_measure_unit.php"  method="POST">
 
-            <br><a href="change_password.php" style="position: absolute; bottom: 15px"> Reset password </a>   
-            <br><a href="home.php" style="position: absolute; bottom: 0px"> Back to home </a>
+                <label for="measure">Measure:</label>
+                <input type="text" id="measure" name="measure">
+                <label for="unit">Unit:</label>
+                <input type="text" id="unit" name="unit">
+
+                <input type="hidden" id="id" name="id" value=<?php echo "$user_id"; ?>>
+
+                <input type="submit" value="Add new examination type">
+            </form>
+            </p><hr>
+
+            <h2>Add new examination type with existing unit: </h2>
+            <p>
+            <form action="success_measure.php"  method="POST">
+
+                <label for="measure">Measure:</label>
+                <input type="text" id="measure" name="measure">
+
+                <label for="units">Unit: </label>
+                <input list="unit" id="units" name="unit">
+                <datalist id="unit">
+                <?php foreach($units_array as $u) 
+                    echo"<option value='$u'>\n";
+                    ?>
+                </datalist>
+
+                <input type="hidden" id="id" name="id" value=<?php echo "$user_id"; ?>>
+
+                <input type="submit" value="Add new examination type">
+            </form>
+            </p><hr>
+
+            <h2>Add only new unit: </h2>
+            <p>
+            <form action="success_unit.php"  method="POST">
+
+                <label for="unit">Unit:</label>
+                <input type="text" id="unit" name="unit">
+
+                <input type="hidden" id="id" name="id" value=<?php echo "$user_id"; ?>>
+
+                <input type="submit" value="Add new unit type">
+            </form>
+            </p><hr>
+
+            <p>
+                <form action="log_out.php" method="POST">
+                    <input type="submit" value="Log out">
+                </form>
+            </p>
+
+            <br><a href="change_password.php" style="position: absolute; bottom: 0px"> Reset password </a>   
         
         
     </body>
