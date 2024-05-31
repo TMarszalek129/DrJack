@@ -8,10 +8,10 @@
         
     }
 
-    $servername = "mysql.agh.edu.pl";
-    $username = "tmarsza1";
-    $password = "SL80yoFJTkYbL5mf";
-    $dbname = "tmarsza1";
+    $servername = "";
+    $username = "";
+    $password = "";
+    $dbname = "";
     $_SESSION["servername"] = $servername;
     $_SESSION["username"] = $username;
     $_SESSION["password"] = $password;
