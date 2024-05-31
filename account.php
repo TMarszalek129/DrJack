@@ -142,6 +142,12 @@
             
             $sql = "INSERT INTO logins(account_id, passed, IP)
             VALUES ('".$user_id."', '".$passed."', '".$ip."')";
+
+            if($new_measurement == 1){
+                mysqli_query($conn, $sql_insert_measurement);
+                $new_measurement = 0;
+                
+            }
             
 
             if($passed == 1){
@@ -153,114 +159,116 @@
                 echo "You are a <b>$w_m</b>";
                 if(!(empty($to_base)))
                     mysqli_query($conn, $sql);
+
+                echo "
+                
+                <br>
+                <p>
+                    <form action='exams.php' method='POST'>
+                        <input type='hidden' id='id' name='id' value=$user_id>
+                        <input type='submit' value='See your examinations'>
+                    </form>
+                </p>
+                <hr>
+                <h2>Add new measurement: </h2>
+                <p>
+                <form action='success.php'  method='POST'>
+                    <label for='measures'>Measure: </label>
+                    <input list='measure' id='measures' name='measure'>
+                    <datalist id='measure'>";
+                    foreach($measures_array as $m) 
+                        echo"<option value='$m'>\n";
+
+                    echo"</datalist>
+    
+                    <label for='units'>Unit: </label>
+                    <input list='unit' id='units' name='unit'>
+                    <datalist id='unit'>";
+                    foreach($units_array as $u) 
+                        echo"<option value='$u'>\n";
+                
+                    echo"</datalist>
+    
+                    <label for='val_1'>Value 1:</label>
+                    <input type='number' id='val_1' name='val_1'>
+    
+                    <label for='val_2'>Value 2:</label>
+                    <input type='number' id='val_2' name='val_2' value='0'>
+    
+                    <label for='timestamp'>Timestamp:</label>
+                    <input type='datetime-local' id='timestamp' name='timestamp'>
+    
+                    <input type='hidden' id='id' name='id' value=$user_id>
+    
+                    <input type='submit' value='Add new measurement'>
+                </form>
+                </p><hr>
+    
+                <h2>Add new examination type with new unit: </h2>
+                <p>
+                <form action='success_measure_unit.php'  method='POST'>
+    
+                    <label for='measure'>Measure:</label>
+                    <input type='text' id='measure' name='measure'>
+                    <label for='unit'>Unit:</label>
+                    <input type='text' id='unit' name='unit'>
+    
+                    <input type='hidden' id='id' name='id' value=$user_id>
+    
+                    <input type='submit' value='Add new examination type'>
+                </form>
+                </p><hr>
+    
+                <h2>Add new examination type with existing unit: </h2>
+                <p>
+                <form action='success_measure.php'  method='POST'>
+    
+                    <label for='measure'>Measure:</label>
+                    <input type='text' id='measure' name='measure'>
+    
+                    <label for='units'>Unit: </label>
+                    <input list='unit' id='units' name='unit'>
+                    <datalist id='unit'>";
+                    foreach($units_array as $u) 
+                        echo"<option value='$u'>\n";
+                    
+                    echo"</datalist>
+    
+                    <input type='hidden' id='id' name='id' value=$user_id>
+    
+                    <input type='submit' value='Add new examination type'>
+                </form>
+                </p><hr>
+    
+                <h2>Add only new unit: </h2>
+                <p>
+                <form action='success_unit.php'  method='POST'>
+    
+                    <label for='unit'>Unit:</label>
+                    <input type='text' id='unit' name='unit'>
+    
+                    <input type='hidden' id='id' name='id' value=$user_id>
+    
+                    <input type='submit' value='Add new unit type'>
+                </form>
+                </p><hr>
+    
+                <p>
+                    <form id='home' action='log_out.php' method='POST'>
+                        <input type='submit' value='Log out'>
+                    </form>
+                </p>
+
+                ";
             }
-            else
+            else{
                 echo "\nWrong email or password!!!\n";
-            if($new_measurement == 1){
-                mysqli_query($conn, $sql_insert_measurement);
-                $new_measurement = 0;
+                echo "<br><a href='home.php' style='position: absolute; bottom: 15px'>Back to home</a>";
                 
             }
-                ?>
-            <br>
-            <p>
-                <form action="exams.php" method="POST">
-                    <input type="hidden" id="id" name="id" value=<?php echo "$user_id"; ?>>
-                    <input type="submit" value="See your examinations">
-                </form>
-            </p>
-            <hr>
-            <h2>Add new measurement: </h2>
-            <p>
-            <form action="success.php"  method="POST">
-                <label for="measures">Measure: </label>
-                <input list="measure" id="measures" name="measure">
-                <datalist id="measure">
-                <?php foreach($measures_array as $m) 
-                    echo"<option value='$m'>\n";
-                    ?>
-                </datalist>
-
-                <label for="units">Unit: </label>
-                <input list="unit" id="units" name="unit">
-                <datalist id="unit">
-                <?php foreach($units_array as $u) 
-                    echo"<option value='$u'>\n";
-                    ?>
-                </datalist>
-
-                <label for="val_1">Value 1:</label>
-                <input type="number" id="val_1" name="val_1">
-
-                <label for="val_2">Value 2:</label>
-                <input type="number" id="val_2" name="val_2" value="0">
-
-                <label for="timestamp">Timestamp:</label>
-                <input type="datetime-local" id="timestamp" name="timestamp">
-
-                <input type="hidden" id="id" name="id" value=<?php echo "$user_id"; ?>>
-
-                <input type="submit" value="Add new measurement">
-            </form>
-            </p><hr>
-
-            <h2>Add new examination type with new unit: </h2>
-            <p>
-            <form action="success_measure_unit.php"  method="POST">
-
-                <label for="measure">Measure:</label>
-                <input type="text" id="measure" name="measure">
-                <label for="unit">Unit:</label>
-                <input type="text" id="unit" name="unit">
-
-                <input type="hidden" id="id" name="id" value=<?php echo "$user_id"; ?>>
-
-                <input type="submit" value="Add new examination type">
-            </form>
-            </p><hr>
-
-            <h2>Add new examination type with existing unit: </h2>
-            <p>
-            <form action="success_measure.php"  method="POST">
-
-                <label for="measure">Measure:</label>
-                <input type="text" id="measure" name="measure">
-
-                <label for="units">Unit: </label>
-                <input list="unit" id="units" name="unit">
-                <datalist id="unit">
-                <?php foreach($units_array as $u) 
-                    echo"<option value='$u'>\n";
-                    ?>
-                </datalist>
-
-                <input type="hidden" id="id" name="id" value=<?php echo "$user_id"; ?>>
-
-                <input type="submit" value="Add new examination type">
-            </form>
-            </p><hr>
-
-            <h2>Add only new unit: </h2>
-            <p>
-            <form action="success_unit.php"  method="POST">
-
-                <label for="unit">Unit:</label>
-                <input type="text" id="unit" name="unit">
-
-                <input type="hidden" id="id" name="id" value=<?php echo "$user_id"; ?>>
-
-                <input type="submit" value="Add new unit type">
-            </form>
-            </p><hr>
-
-            <p>
-                <form action="log_out.php" method="POST">
-                    <input type="submit" value="Log out">
-                </form>
-            </p>
-
+            ?>
             <br><a href="change_password.php" style="position: absolute; bottom: 0px"> Reset password </a>   
-        
-        
+            
+            <form id="home" action='pass_check.php' method='POST'></form>
     </body>
 </html>
