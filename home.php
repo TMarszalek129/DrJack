@@ -47,9 +47,9 @@
         </p>
         
         <a href="create_account.php"> Create new account </a><br>
-        <a href="change_password.php"> Do you forgot password? </a><br>
+        <a href="reset_password.php"> Do you forgot password? </a><br>
+        <a href="document.pdf" target="_blank">Show the documentation</a><br>
         <a href="admin.php" style="color:red;">Admin site</a><br>
         
-
     </body>
 </html>

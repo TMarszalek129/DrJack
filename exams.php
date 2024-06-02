@@ -242,14 +242,14 @@
                         (minimum systolic: $pressure_min_1, maximum systolic: $pressure_max_1)
                         (minimum diastolic: $pressure_min_2, maximum diastolic: $pressure_max_2)
                         <br>";
-                if($pressure_mean_1 < $sys_pressure_down && count($pressure_array_1))
+                if($pressure_mean_1 < $sys_pressure_down && count($pressure_array_1) > 3)
                     echo "<b style='color:red;'>Your average systolic pressure value is too low (standard: $sys_pressure_down - $sys_pressure_up), please visit the doctor</b><br>";
-                if($pressure_mean_1 > $sys_pressure_up && count($pressure_array_1))
+                if($pressure_mean_1 > $sys_pressure_up && count($pressure_array_1) > 3)
                     echo "<b style='color:red;'>Your average systolic pressure value is too high (standard: $sys_pressure_down - $sys_pressure_up), please visit the doctor</b><br>";
 
-                if($pressure_mean_2 < $diast_pressure_down && count($pressure_array_2))
+                if($pressure_mean_2 < $diast_pressure_down && count($pressure_array_2) > 3)
                     echo "<b style='color:red;'>Your average diastolic pressure value is too low (standard: $diast_pressure_down - $diast_pressure_up), please visit the doctor</b><br>";
-                if($pressure_mean_2 > $diast_pressure_up && count($pressure_array_2))
+                if($pressure_mean_2 > $diast_pressure_up && count($pressure_array_2) > 3) 
                     echo "<b style='color:red;'>Your average diastolic pressure value is too high (standard: $diast_pressure_down - $diast_pressure_up), please visit the doctor</b><br>";
             }
 

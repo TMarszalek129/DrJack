@@ -19,6 +19,14 @@
                 $dane = htmlspecialchars($dane);
                 return $dane;
             }
+        function randomPassword() { // from https://stackoverflow.com/questions/6101956/generating-a-random-password-in-php
+            $alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
+            for ($i = 0; $i < 8; $i++) {
+                $n = rand(0, strlen($alphabet)-1);
+                $pass[$i] = $alphabet[$n];
+            }
+            return implode($pass);
+        }
 
             $passed = 0;
             if($_SERVER["REQUEST_METHOD"] == "POST")
@@ -29,23 +37,6 @@
                 }
                 else
                     $email = format($_POST["email"]);
-
-                if(empty($_POST["apassword"])){
-                    $apassErr = "You must enter your actual password";
-                    
-                }
-                else{
-                    $apass = format($_POST["apassword"]);
-                    $hash_apass = password_hash($apass, PASSWORD_DEFAULT);
-                }
-                if(empty($_POST["npassword"])){
-                    $npassErr = "You must enter your new password";
-                    
-                }
-                else{
-                    $npass = format($_POST["npassword"]);
-                    $hash_npass = password_hash($npass, PASSWORD_DEFAULT);
-                }
             }
 
             $sqlSelect = "SELECT * FROM accounts";
@@ -64,23 +55,40 @@
 
             if (mysqli_num_rows($result) > 0) {
                 while($row = mysqli_fetch_assoc($result)) {
-                    if($row["email"] == $email && password_verify($apass, $row["password"])){
+                    if($row["email"] == $email){
                         $passed = 1;
                         $account_id = $row["account_id"];
+                        $new_password = randomPassword();
+                        $new_password_hash = password_hash($new_password, PASSWORD_DEFAULT);
                     }
                 }
             }
         
             
             $sql = "UPDATE accounts
-                    SET password = '$hash_npass' 
+                    SET password = '$new_password_hash' 
                     WHERE accounts.account_id =  '$account_id'";
+            
+            
+            
+            
+            $msg = "Your new password here: $new_password";
+            
                 
             if(mysqli_query($conn, $sql)){
-                echo "The password was changed\n";
+                echo "Password was changed<br>";
+                echo "Password was sent - email: $email<br>";
+                $headers = "From: drJack@drJack.com\r\n";
+                $headers .= "Reply-To: drJack@drJack.com\r\n";
+                $headers .= "Return-Path: drJack@drJack.com\r\n";
+                $headers .= "CC: drJack@drJack.com\r\n";
+                $headers .= "BCC: drJack@drJack.com\r\n";
+                mail($email,"Password was changed - do not reply", $msg, $headers);
             }
-            else
-                echo "Error: ".$sql."<br>".mysqli_error($conn);
+            else{
+                echo "Error: <br>";
+                echo "There is no account associated with this e-mail adress";
+            }
                 ?>   
                 <br><a href="home.php"> Back to home </a>
         

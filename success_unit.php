@@ -98,7 +98,7 @@
                     }
                 }
                 else {
-                        echo "Blad: ";
+                        echo "Error: ";
                         if(!(empty($unit_id)))
                             echo "\nYour unit has already existed, change name or use existed one\n";
                         if($self_units >= 5)

@@ -86,7 +86,7 @@
     if (mysqli_num_rows($result) > 0) {
         
         while($row = mysqli_fetch_assoc($result)) {
-            if($row["email"] == $email && password_verify($pass, $row["password"]))
+            if($row["email"] == $email)
                 $in_base = 1;    
         }
         } 
@@ -95,18 +95,22 @@
         $sql = "INSERT INTO accounts(first_name, last_name, email, password, birth_date, sex)
                 VALUES ('".$fname."', '".$lname."', '".$email."' , '".$hash_pass."', '".$bdate."', '".$sex."')";
         if(mysqli_query($conn, $sql))
-            echo "Dopisano";
+            echo "The account is created";
         else
-            echo "Blad: ".$sql."<br>".mysqli_error($conn);
+            echo "Error: ".$sql."<br>".mysqli_error($conn);
     }
+    else
+        echo "The account associated with this e-mail already exists";
     
-    ?>
-    <p>
-            <form action="account.php" method="POST">
-                <input type="hidden" name="email" value=<?php echo "$email"; ?> >
-                <input type="hidden" name="password" value=<?php echo "$pass"; ?>>
-                <input type="submit" value="BACK TO YOUR PROFILE!">
+    if($in_base == 0)
+    echo"<p>
+            <form action='account.php' method='POST'>
+                <input type='hidden' name='email' value=$email>
+                <input type='hidden' name='password' value=$pass>
+                <input type='submit' value='BACK TO YOUR PROFILE!'>
             </form>
-    </p>
+    </p>"
+    ?>
+    <br><a href="home.php"> Back to home </a>
 </body>
 </html>

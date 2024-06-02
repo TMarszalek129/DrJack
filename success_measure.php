@@ -102,7 +102,7 @@
                     }
                 }
                 else {
-                        echo "Blad: ";
+                        echo "Error: ";
                         if(!(empty($measure_id)))
                             echo "\nYour measure has already existed, change name or use existed one\n";
                         if($self_measures >= 5)

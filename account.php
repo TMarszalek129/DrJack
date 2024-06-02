@@ -24,7 +24,6 @@
             }
             $to_base = $_POST["to_base"];
             $passed = 0;
-            $new_measurement = 0;
             if($_SERVER["REQUEST_METHOD"] == "POST")
             {
                 if(empty($_POST["email"])){
@@ -42,29 +41,6 @@
                     $_SESSION["pass"] = $pass;
                     $hash_pass = password_hash($pass, PASSWORD_DEFAULT);
                 }
-
-                $measure = format($_POST["measure"]);
-                $unit = format($_POST["unit"]);
-                $value_1 = format($_POST["value_1"]);
-                $value_2 = format($_POST["value_2"]);
-                $timestamp = format($_POST["timestamp"]);
-
-                if($value_2 == 0){
-                    $value_2 = NULL;
-                }
-
-                if(!(empty($_POST["measure"]))){
-                    $measure_id = array_search("$measure", $measures_array);
-                }
-
-                if(!(empty($_POST["unit"]))){
-                    $unit_id = array_search("$unit", $units_array);
-                }
-
-                if(!(empty($_POST["measure"])) && !(empty($_POST["unit"])) && !(empty($_POST["value_1"])) 
-                    && !(empty($_POST["value_2"])) && !(empty($_POST["timestamp"]))){
-                        $new_measurement = 1;
-                    }
                
             }
 
@@ -74,8 +50,7 @@
            
             $sql_measures = "SELECT * FROM measures";
             $sql_units = "SELECT * FROM units";
-            $sql_insert_measurement = "INSERT INTO measurement(account_id, measure_id, value_1, value_2, timestamp)
-                                        VALUES ('".$user_id."', '".$measure_id."', '".$value_1."', '".$value_2."', '".$timestamp."')";
+           
 
             $servername = $_SESSION["servername"];
             $username = $_SESSION["username"];
@@ -108,6 +83,8 @@
             $units = mysqli_query($conn, $sql_units);
             $measures_array = array();
             $units_array = array();
+            $my_measures = array();
+            $my_units = array();
 
 
            if (mysqli_num_rows($result) > 0) {
@@ -129,6 +106,11 @@
                     $id = $row["measure_id"];
                     $el = $row["measure_name"];
                     $measures_array["$id"] = $el;
+
+                    if($row["account_id"] == $user_id)
+                    {
+                        $my_measures[] = $el;
+                    }
                 }
                 }
             if (mysqli_num_rows($units) > 0) {
@@ -137,18 +119,22 @@
                     $id = $row["unit_id"];
                     $el = $row["unit"];
                     $units_array["$id"] = $el;
-                }
-                }
-            
-            $sql = "INSERT INTO logins(account_id, passed, IP)
-            VALUES ('".$user_id."', '".$passed."', '".$ip."')";
 
-            if($new_measurement == 1){
-                mysqli_query($conn, $sql_insert_measurement);
-                $new_measurement = 0;
-                
+                    if($row["account_id"] == $user_id)
+                    {
+                        $my_units[] = $el;
+                    }
+                }
+                }
+            if(isset($user_id)){
+                $sql = "INSERT INTO logins(account_id, passed, IP)
+                VALUES ('".$user_id."', '".$passed."', '".$ip."')";
             }
-            
+            else
+            {
+                $sql = "INSERT INTO logins(passed, IP)
+                VALUES ('".$passed."', '".$ip."')";
+            }
 
             if($passed == 1){
                 echo "Hello $first_name $last_name! <br>";
@@ -252,23 +238,63 @@
                     <input type='submit' value='Add new unit type'>
                 </form>
                 </p><hr>
+
+                <h2>Edit your added examination: </h2>";
+
+                echo"<p>
+                    <form action='edit_measure.php'  method='POST'>
+                    <label for='my_measures'>Measure: </label>
+                    <input list='my_measure' id='my_measures' name='my_measure'>
+                    <datalist id='my_measure'>";
+                    foreach($my_measures as $m) 
+                        echo"<option value='$m'>\n";
+                    echo"</datalist>
+                    <label for='new_measure'>New measure: </label>
+                    <input type='text' id='new_measure' name='new_measure'>
+
+                    <input type='hidden' id='id' name='id' value=$user_id>
     
-                <p>
+                    <input type='submit' value='Edit your measure'>
+                    </form>
+                    </p><hr>
+                    ";
+                echo "<h2>Edit your added unit: </h2>";                    
+                echo"<p>
+                    <form action='edit_unit.php'  method='POST'>
+                    <label for='my_units'>Measure: </label>
+                    <input list='my_unit' id='my_units' name='my_unit'>
+                    <datalist id='my_unit'>";
+                    foreach($my_units as $u) 
+                        echo"<option value='$u'>\n";
+                    echo"</datalist>
+                    <label for='new_unit'>New unit: </label>
+                    <input type='text' id='new_unit' name='new_unit'>
+
+                    <input type='hidden' id='id' name='id' value=$user_id>
+    
+                    <input type='submit' value='Edit your unit'>
+                    </form>
+                    </p><hr>
+                    ";
+                
+
+                echo "<p>
                     <form id='home' action='log_out.php' method='POST'>
                         <input type='submit' value='Log out'>
                     </form>
-                </p>
-
-                ";
+                    </p>";
+                
+                echo "<br><a href='change_password.php' > Reset password </a>";
             }
             else{
+                mysqli_query($conn, $sql);
                 echo "\nWrong email or password!!!\n";
-                echo "<br><a href='home.php' style='position: absolute; bottom: 15px'>Back to home</a>";
+                echo "<br><a href='home.php' style='position: absolute; bottom: 0px'>Back to home</a>";
                 
             }
+           
+               
             ?>
-            <br><a href="change_password.php" style="position: absolute; bottom: 0px"> Reset password </a>   
             
-            <form id="home" action='pass_check.php' method='POST'></form>
     </body>
 </html>

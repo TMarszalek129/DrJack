@@ -29,8 +29,8 @@
         $passed = 0;
         $new_measurement = 0;
 
-        $sql_measures = "SELECT * FROM measures WHERE account_id = 0 OR account_id = '$user_id'";
-        $sql_units = "SELECT * FROM units WHERE account_id = 0 OR account_id = '$user_id'";
+        $sql_measures = "SELECT * FROM measures";
+        $sql_units = "SELECT * FROM units";
 
         $servername = $_SESSION["servername"];
         $username = $_SESSION["username"];
@@ -114,7 +114,7 @@
                 }
             }
             else {
-                    echo "Blad: ".$sql."<br>".mysqli_error($conn);
+                    echo "Error: ".$sql."<br>".mysqli_error($conn);
                     echo "\nMeasure and unit does not compatible\n";
             }   
             
